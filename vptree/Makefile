@@ -50,12 +50,9 @@ TYPES = sequential openmp cilk pthreads
 #
 
 # call everytime
-.PRECIOUS: %.a
 
 
 lib: $(addsuffix .a, $(addprefix lib/$(SRC)_, $(TYPES)))
-
-	$(CC) $(CFLAGS) $(INCLUDES) -o $@ $^ $(LDFLAGS) $(LIBS)
 
 # this is a suffix replacement rule for building .o's from .c's
 # it uses automatic variables $<: the name of the prerequisite of
