@@ -5,13 +5,6 @@
 #include <pthread.h>
 #define NTHREADSD 10
 
-typedef struct{
-  double* vp;
-  double md;
-  int idx;
-  struct vptree* inner;
-  struct vptree* outer;
-}vptree;
 
 typedef struct{
   double * X
@@ -203,7 +196,7 @@ vptree * tree;
   for(int i=0;i<n;i++){
     ids[i]=i;
   }
-  
+
   tree = buildtree(data,ids,n,d);
   return tree;
 }

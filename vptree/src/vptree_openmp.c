@@ -6,13 +6,6 @@
 #define NTHREADS 8
 #define DTHREADS 8
 
-typedef struct{
-  double* vp;
-  double md;
-  int idx;
-  struct vptree* inner;
-  struct vptree* outer;
-}vptree;
 
 
 double swap(double * arr,int a,int b){

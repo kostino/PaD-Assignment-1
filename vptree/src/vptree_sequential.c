@@ -2,13 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-typedef struct{
-  double* vp;
-  double md;
-  int idx;
-  struct vptree* inner;
-  struct vptree* outer;
-}vptree;
+
 
 
 double swap(double * arr,int a,int b){

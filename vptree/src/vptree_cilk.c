@@ -5,13 +5,6 @@
 #include <cilk/cilk.h>
 #include <cilk/cilk_api.h>
 
-typedef struct{
-  double* vp;
-  double md;
-  int idx;
-  struct vptree* inner;
-  struct vptree* outer;
-}vptree;
 
 
 void setWorkers(char *n){
