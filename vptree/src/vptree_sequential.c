@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <string.h>
 #include "vptree.h"
 
 
 
-double swap(double * arr,int a,int b){
+void swap(double * arr,int a,int b){
   double temp=arr[a];
   arr[a]=arr[b];
   arr[b]=temp;
@@ -40,7 +41,7 @@ double QS(double * X,int left,int right,int k){
   if(left==right){
     return left;
   }
-  pivotIndex=left+(((int)rand())%(right-left+1));
+  int pivotIndex=left+(((int)rand())%(right-left+1));
   pivotIndex=partition(X,left,right,pivotIndex);
   if(k==pivotIndex){
     return X[k];
@@ -68,13 +69,13 @@ vptree * buildtree(double *X,int* ids,int n,int d){
 
   tree->vp=(double*)malloc(d*sizeof(double));
   for(int i=0;i<d;i++){
-    tree->vp[i]=Χ[(n-1)*d+i];
+    tree->vp[i]=X[(n-1)*d+i];
   }
   tree->idx=ids[n-1];
   double * dis;
   dis= (double*)malloc((n-1)*sizeof(double));
   for(int i=0;i<(n-1);i++){
-    dis[i]=dist(tree->vp,X[i*d],d);
+    dis[i]=dist(tree->vp,&X[i*d],d);
   }
   double * data;
   data =(double *)malloc((n-1)*sizeof(double));

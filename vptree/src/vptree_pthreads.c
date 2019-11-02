@@ -1,14 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <string.h>
 #include <sys/types.h>
 #include <pthread.h>
 #include "vptree.h"
 #define NTHREADSD 10
 
+void * treew(void * arg);
 
 typedef struct{
-  double * X
+  double * X;
   int d;
   int n;
   int id;
@@ -23,26 +25,13 @@ typedef struct{
   vptree * inner;
 }treewrap;
 
-double swap(double * arr,int a,int b){
+void swap(double * arr,int a,int b){
   double temp=arr[a];
   arr[a]=arr[b];
   arr[b]=temp;
 }
 
-void * treew(void * arg){
-  treewrap * temp= (treewrap*)arg;
-  temp->inner = buildtree(temp->X,temp->ids,temp->n,temp->d);
-  pthread_exit(NULL);
-}
 
-void * distWrapper(void * arg){
-  dwrap  * temp = (dwrap *)arg;
-  int block=(((temp->n)-1)/NTHREADSD)+1;
-  for(int j=id*block;j<(id+1)*block||j<n-1;j++){
-    temp->dis[j]=dist(temp->X[(n-1)*temp->d],temp->X[j*temp->d],temp->d);
-  }
-  pthread_exit(NULL);
-}
 
 double dist(double *point1,double *point2,int d){
   double distance =0;
@@ -53,12 +42,23 @@ double dist(double *point1,double *point2,int d){
   return distance;
 }
 
+void * distWrapper(void * arg){
+  dwrap  * temp = (dwrap *)arg;
+  int block=(((temp->n)-1)/NTHREADSD)+1;
+  for(int j=(temp->id)*block;j<((temp->id)+1)*block||j<(temp->n)-1;j++){
+    temp->dis[j]=dist(&temp->X[((temp->n)-1)*temp->d],&temp->X[j*temp->d],temp->d);
+  }
+  pthread_exit(NULL);
+}
+
+
+
 int partition(double * X,int left ,int right,int pivotIndex){
 
-  pivotValue = X[pivotIndex];
+  double pivotValue = X[pivotIndex];
   swap(X,pivotIndex,right);
   int storeIndex = left;
-  for(i=left;i<right;i++){
+  for(int i=left;i<right;i++){
     if(X[i]<pivotValue){
       swap(X,storeIndex,i);
       storeIndex++;
@@ -72,7 +72,7 @@ double QS(double * X,int left,int right,int k){
   if(left==right){
     return left;
   }
-  pivotIndex=left+(((int)rand())%(right-left+1));
+  int pivotIndex=left+(((int)rand())%(right-left+1));
   pivotIndex=partition(X,left,right,pivotIndex);
   if(k==pivotIndex){
     return X[k];
@@ -107,23 +107,23 @@ vptree * buildtree(double *X,int* ids,int n,int d){
 
   tree->vp=(double*)malloc(d*sizeof(double));
   for(int i=0;i<d;i++){
-    tree->vp[i]=Χ[(n-1)*d+i];
+    tree->vp[i]=X[(n-1)*d+i];
   }
   tree->idx=ids[n-1];
   double * dis;
   dis= (double*)malloc((n-1)*sizeof(double));
 
   for(int i=0;i<NTHREADSD;i++){
-    dwrap[i].X=X;
-    dwrap[i].d=d;
-    dwrap[i].dis=dis;
-    dwrap[i].n=n;
+    points[i].X=X;
+    points[i].d=d;
+    points[i].dis=dis;
+    points[i].n=n;
   }
 
 
   for(int i=0;i<NTHREADSD;i++){
-    dwrap[i].id=i;
-    pthread_create(&dthreads[i],NULL,distWrapper,((void*)(&dwrap[i]));
+    points[i].id=i;
+    pthread_create(&dthreads[i],NULL,distWrapper,((void*)(&points[i])));
   }
   for(int i=0;i<NTHREADSD;i++){
     pthread_join(dthreads[i],NULL);
@@ -166,6 +166,7 @@ vptree * buildtree(double *X,int* ids,int n,int d){
     }
   }
   treewrap * trp;
+  trp = (treewrap *)malloc(sizeof(treewrap));
   trp->ids=innerIds;
   trp->X=innerP;
   trp->n=innerC;
@@ -179,7 +180,11 @@ vptree * buildtree(double *X,int* ids,int n,int d){
   return tree;
 }
 
-
+void * treew(void * arg){
+  treewrap * temp= (treewrap*)arg;
+  temp->inner = buildtree(temp->X,temp->ids,temp->n,temp->d);
+  pthread_exit(NULL);
+}
 
 
 vptree* buildvp(double *X,int n,int d){

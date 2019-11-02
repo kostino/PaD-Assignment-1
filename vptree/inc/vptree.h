@@ -1,7 +1,7 @@
 #ifndef VPTREE_H
 #define VPTREE_H
 // type definition of vptree
-typedef struct{
+typedef struct vptree{
   double* vp;
   double md;
   int idx;
