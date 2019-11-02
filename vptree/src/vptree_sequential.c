@@ -23,10 +23,10 @@ double dist(double *point1,double *point2,int d){
 
 int partition(double * X,int left ,int right,int pivotIndex){
 
-  pivotValue = X[pivotIndex];
+  double pivotValue = X[pivotIndex];
   swap(X,pivotIndex,right);
   int storeIndex = left;
-  for(i=left;i<right;i++){
+  for(int i=left;i<right;i++){
     if(X[i]<pivotValue){
       swap(X,storeIndex,i);
       storeIndex++;
