@@ -75,7 +75,7 @@ vptree * buildtree(double *X,int* ids,int n,int d){
   tree->idx=ids[n-1];
   double * dis;
   dis= (double*)malloc((n-1)*sizeof(double));
-  #pragma omp parallel num_threads(DTHREADS)
+  #pragma omp parallel for num_threads(DTHREADS)
   for(int i=0;i<(n-1);i++){
     dis[i]=dist(tree->vp,X[i*d],d);
   }
