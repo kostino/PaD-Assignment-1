@@ -3,7 +3,6 @@
 #include <math.h>
 
 #include <omp.h>
-#define NTHREADS 8
 #define DTHREADS 8
 
 
@@ -136,7 +135,6 @@ vptree * buildtree(double *X,int* ids,int n,int d){
 vptree* buildvp(double *X,int n,int d){
   vptree * tree;
   double * data;
-  omp_set_num_threads(NTHREADS);
   data =(double *)malloc(n*d*sizeof(double));
   memcpy(data,X,n*d*sizeof(double));
   int * ids;
