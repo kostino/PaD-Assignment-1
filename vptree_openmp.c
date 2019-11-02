@@ -4,6 +4,7 @@
 
 #include <omp.h>
 #define NTHREADS 8
+#define DTHREADS 8
 
 typedef struct{
   double* vp;
@@ -82,7 +83,7 @@ vptree * buildtree(double *X,int* ids,int n,int d){
   tree->idx=ids[n-1];
   double * dis;
   dis= (double*)malloc((n-1)*sizeof(double));
-  #pragma omp parallel num_threads(NTHREADS)
+  #pragma omp parallel num_threads(DTHREADS)
   for(int i=0;i<(n-1);i++){
     dis[i]=dist(tree->vp,X[i*d],d);
   }
@@ -142,6 +143,7 @@ vptree * buildtree(double *X,int* ids,int n,int d){
 vptree* buildvp(double *X,int n,int d){
   vptree * tree;
   double * data;
+  omp_set_num_threads(NTHREADS);
   data =(double *)malloc(n*d*sizeof(double));
   memcpy(data,X,n*d*sizeof(double));
   int * ids;
