@@ -24,7 +24,7 @@ CC = gcc-6
 CFLAGS = -O2 -fcilkplus -fopenmp -Wall
 
 # define any directories containing header files
-INCLUDES =inc/
+INCLUDES =-Iinc
 
 # define library paths in addition to /usr/lib
 #   if I wanted to include libraries not in /usr/lib specify
